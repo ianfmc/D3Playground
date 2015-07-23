@@ -55,8 +55,8 @@ angular.module('d3Playground')
     angular.forEach($scope.awesomeThings, function(awesomeThing) {
       awesomeThing.rank = Math.random();
     });
-/*
-    var body = d3.select('body');
+
+    var body = d3.select('#tank');
 
     var w = 1024;
     var h =  768;
@@ -71,18 +71,6 @@ angular.module('d3Playground')
                   {type: 'shot', x: 300, y: 300}];
 
     var svg = body.append('svg');
-
-    svg.attr('width', w);
-    svg.attr('height', h);
-
-    var leftScoreBox = svg.append('rect')
-      .attr('x', paddingWidth)
-      .attr('y', paddingWidth)
-      .attr('width', 100)
-      .attr('height', 100)
-      .style('fill', d3.rgb( 200, 0, 0));
-
-      var svg = body.append('svg');
 
     svg.attr('width', w);
     svg.attr('height', h);
@@ -158,7 +146,6 @@ angular.module('d3Playground')
         }
         else {
           return '4';
-        }
-*/
+        }});
 
   });
