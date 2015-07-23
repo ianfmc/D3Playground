@@ -10,17 +10,22 @@ angular.module('d3Playground')
 
     var paddingWidth = 5;
 
-    var spots = [ {type: 'pass', x: 200, y: 100},
-                  {type: 'pass', x: 250, y: 300},
-                  {type: 'shot', x: 800, y: 400},
-                  {type: 'pass', x: 540, y: 350},
-                  {type: 'pass', x: 600, y: 200},
-                  {type: 'shot', x: 300, y: 300}];
+    var spots = [ {player: '1', type: 'pass', x: 200, y: 100} ];
+
+    /*
+                  {player: '2', type: 'pass', x: 250, y: 300},
+                  {player: '3', type: 'shot', x: 800, y: 400},
+                  {player: '4', type: 'pass', x: 540, y: 350},
+                  {player: '5', type: 'pass', x: 600, y: 200},
+                  {player: '6', type: 'shot', x: 300, y: 300}];
+
+                  */
 
     var svg = body.append('svg');
 
     svg.attr('width', w);
     svg.attr('height', h);
+    svg.style('border', '2px black solid');
 
     /* var Left Score Box */
 
@@ -44,7 +49,7 @@ angular.module('d3Playground')
 
     svg.append('rect')
       .attr('class', 'score-box')
-      .attr('x', (w-100)-paddingWidth)
+      .attr('x', (w-100)-2*paddingWidth)
       .attr('y', paddingWidth)
       .attr('width', 100)
       .attr('height', 100)
@@ -85,10 +90,10 @@ angular.module('d3Playground')
       .attr('class', 'tank')
       .attr('x', paddingWidth)
       .attr('y', 100+(2*paddingWidth))
-      .attr('width', w-(2*paddingWidth))
-      .attr('height', (h-(100+(2*paddingWidth)+paddingWidth)));
+      .attr('width', w-(3*paddingWidth))
+      .attr('height', (h-(100+(3*paddingWidth)+paddingWidth)));
 
-    /* var EventCircles */
+    /* var Event Circles */
 
     svg.selectAll('circle')
       .data(spots)
@@ -109,7 +114,21 @@ angular.module('d3Playground')
         }
         else {
           return '4';
-        }});  
+        }});
+
+    /* var Player Numbers */
+
+    svg.selectAll('text')
+      .data(spots)
+      .enter()
+      .append('text')
+      .text(function(d) {return d.player; })
+      .attr('x', function (d) { return d.x + paddingWidth; })
+      .attr('y', function (d) { return d.y + 100 + 4*paddingWidth; })
+      .attr('font-family', 'arial')
+      .attr('font-size', '30px')
+      .attr('fill', 'black')
+      .attr('text-anchor', 'middle');
 });
 
 angular.module('d3Playground')
