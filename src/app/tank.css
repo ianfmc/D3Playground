@@ -1,0 +1,8 @@
+rect.tank {
+	fill: skyblue;
+}
+
+.score-text {
+	font-size: 60px;
+	fill: white;
+}
