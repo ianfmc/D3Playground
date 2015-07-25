@@ -1,27 +1,35 @@
 'use strict';
 
 angular.module('d3Playground')
-.controller('TankCtrl', function () {
+.controller('TankCtrl', function ($scope) {
 
-    var body = d3.select('#tank');
+    $scope.eventSpots = [ {time: '1:24', player: '1', type: 'pass', x: 100, y: 100},    
+                          {time: '1:54', player: '2', type: 'pass', x: 200, y: 150},
+                          {time: '2:24', player: '3', type: 'shot', x: 300, y: 200},
+                          {time: '2:54', player: '4', type: 'pass', x: 400, y: 250},
+                          {time: '3:24', player: '5', type: 'pass', x: 500, y: 300},
+                          {time: '3:54', player: '6', type: 'pass', x: 600, y: 350},
+                          {time: '4:24', player: '7', type: 'pass', x: 700, y: 300} ];
 
-    var w = 1024;
-    var h =  768;
 
-    var circleSize = 25;
+    $scope.body = d3.select('#tank');
+    $scope.currentIndex = 0;
 
-    var paddingWidth = 5;
+    $scope.tankConfig = {
+      width: 1024,
+      height: 768,
+      circleSize: 25,
+      paddingWidth: 5
+    };
 
-    var spots = [ {player: '1', type: 'pass', x: 200, y: 100},    
-                  {player: '2', type: 'pass', x: 250, y: 300},
-                  {player: '3', type: 'shot', x: 800, y: 400},
-                  {player: '4', type: 'pass', x: 540, y: 350},
-                  {player: '5', type: 'pass', x: 600, y: 200},
-                  {player: '6', type: 'shot', x: 300, y: 300} ];
+    var w = $scope.tankConfig.width;
+    var h =  $scope.tankConfig.height;
 
-                  /**/
+    var circleSize = $scope.tankConfig.circleSize;
+    var paddingWidth = $scope.tankConfig.paddingWidth;
 
-    var svg = body.append('svg');
+
+    var svg = $scope.body.append('svg');
 
     svg.attr('width', w);
     svg.attr('height', h);
@@ -48,7 +56,7 @@ angular.module('d3Playground')
       .style('opacity', '0.25')
       .style('stroke-dasharray', ('20,5'));
 
-    /* Left 5m */
+    /* Left 5m Line*/
 
     svg.append('line')
       .attr('x1', w*0.15)
@@ -60,7 +68,7 @@ angular.module('d3Playground')
       .style('opacity', '0.25')
       .style('stroke-dasharray', ('20,5'));
 
-    /* Right 5m */
+    /* Right 5m Line*/
 
     svg.append('line')
       .attr('x1', w*0.85)
@@ -72,7 +80,7 @@ angular.module('d3Playground')
       .style('opacity', '0.25')
       .style('stroke-dasharray', ('20,5'));
 
-    /* Left 2m */
+    /* Left 2m Line*/
 
     svg.append('line')
       .attr('x1', w*0.05)
@@ -84,7 +92,7 @@ angular.module('d3Playground')
       .style('opacity', '0.25')
       .style('stroke-dasharray', ('20,5'));
 
-    /* Right 2m */
+    /* Right 2m Line*/
 
     svg.append('line')
       .attr('x1', w*0.95)
@@ -120,17 +128,17 @@ angular.module('d3Playground')
     /* Event Circles */
 
     svg.selectAll('circle')
-      .data(spots)
+      .data($scope.eventSpots)
       .enter()
       .append('circle')
       .attr('cx', function (d) { return d.x + paddingWidth; })
       .attr('cy', function (d) { return d.y + 100 + 2*paddingWidth; })
       .attr('r', circleSize)
       .style('fill', function(d, i) {
-        return 'rgba(255, 255, 255, ' + (5-i)*0.2 + ')';
+        return 'rgba(255, 255, 255, ' + Math.max(0, (7-i)*0.2) + ')';
       })
       .style('stroke', function(d, i) {
-        return 'rgba(0, 0, 0, ' + (5-i)*0.2 + ')';
+        return 'rgba(0, 0, 0, ' + Math.max(0, (7-i)*0.2) + ')';
       })
       .style('stroke-width', function(d) {
         if (d.type === 'pass') {
@@ -140,10 +148,10 @@ angular.module('d3Playground')
           return '4';
         }});
 
-    /* var Player Numbers */
+    /* Player Numbers */
 
     svg.selectAll('text')
-      .data(spots)
+      .data($scope.eventSpots)
       .enter()
       .append('text')
       .text(function(d) {return d.player; })
@@ -152,11 +160,11 @@ angular.module('d3Playground')
       .attr('font-family', 'arial')
       .attr('font-size', '30px')
       .style('fill', function(d, i) {
-        return 'rgba(0, 0, 0, ' + (5-i)*0.2 + ')';
+        return 'rgba(0, 0, 0, ' + Math.max(0, (5-i)*0.2) + ')';
       })
       .attr('text-anchor', 'middle');
 
-          /* var Left Score Box */
+    /* Left Score Box */
 
     svg.append('rect')
       .attr('x', paddingWidth)
@@ -165,7 +173,7 @@ angular.module('d3Playground')
       .attr('height', 100)
       .style('fill', d3.rgb( 200, 0, 0));
 
-    /* var Left Score Text */
+    /* Left Score Text */
 
     svg.append('text')
       .text('4')
@@ -174,7 +182,7 @@ angular.module('d3Playground')
       .attr('class', 'score-text')
       .attr('text-anchor', 'middle');
 
-    /* var Right Score Box */
+    /* Right Score Box */
 
     svg.append('rect')
       .attr('class', 'score-box')
@@ -184,7 +192,7 @@ angular.module('d3Playground')
       .attr('height', 100)
       .style('fill', d3.rgb( 0, 200, 0));
 
-    /* var Right Score Text */
+    /* Right Score Text */
 
     svg.append('text')
       .text('2')
@@ -193,25 +201,52 @@ angular.module('d3Playground')
       .attr('class', 'score-text')
       .attr('text-anchor', 'middle');
 
-    /* var Score Box */
+
+    /* Time Box */
 
     svg.append('rect')
-      .attr('x', w/2 - 100)
+      .attr('x', (w/2 - 100))
       .attr('y', paddingWidth)
       .attr('width', 200)
       .attr('height', 100)
       .style('fill', 'grey');
 
-    /* var Control Box Text */ 
+    /* Time Text */ 
 
     svg.append('text')
-      .text('4:30')
+      .text($scope.eventSpots[$scope.currentIndex].time)
       .attr('x', w/2)
       .attr('y', paddingWidth + 70)
       .attr('text-anchor', 'middle')
       .attr('font-family', 'sans-serif')
       .attr('font-size', '60px')
       .attr('fill', 'white');
+
+    /* Forward Button Box */
+
+    svg.append('rect')
+      .attr('x', w*0.50 + (250-100))
+      .attr('y', paddingWidth)
+      .attr('width', 100)
+      .attr('height', 100)
+      .style('fill', 'orange')
+      .on('click', function() {
+        currentIndex = currentIndex + 1;
+        alert('forward' + ' ' + $scope.currentIndex);
+      });
+
+    /* Back Button Box */
+
+    svg.append('rect')
+      .attr('x', w*0.5 - 250)
+      .attr('y', paddingWidth)
+      .attr('width', 100)
+      .attr('height', 100)
+      .style('fill', 'orange')
+      .on('click', function() {
+        currentIndex = currentIndex - 1;
+        alert('back' + ' ' + $scope.currentIndex);
+      });
 
 });
 
