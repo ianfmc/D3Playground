@@ -13,7 +13,10 @@ angular.module('d3Playground')
 
 
     $scope.body = d3.select('#tank');
-    $scope.currentIndex = 0;
+    $scope.index = {
+      top: 0,
+      bottom: 0
+    };
 
     $scope.tankConfig = {
       width: 1024,
@@ -113,7 +116,7 @@ angular.module('d3Playground')
       .attr('x2', w*0.01)
       .attr('y2', 50+(h*0.5)+50)
       .style('stroke-width', 20)
-      .style('stroke', 'white')
+      .style('stroke', 'white');
 
     /* Right Goal */
 
@@ -123,12 +126,12 @@ angular.module('d3Playground')
       .attr('x2', w*0.99)
       .attr('y2', 50+(h*0.5)+50)
       .style('stroke-width', 20)
-      .style('stroke', 'white')
+      .style('stroke', 'white');
 
     /* Event Circles */
 
     svg.selectAll('circle')
-      .data($scope.eventSpots)
+      .data($scope.eventSpots.slice($scope.index.botom, $scope.index.top))
       .enter()
       .append('circle')
       .attr('cx', function (d) { return d.x + paddingWidth; })
@@ -151,7 +154,7 @@ angular.module('d3Playground')
     /* Player Numbers */
 
     svg.selectAll('text')
-      .data($scope.eventSpots)
+      .data($scope.eventSpots.slice($scope.index.botom, $scope.index.top))
       .enter()
       .append('text')
       .text(function(d) {return d.player; })
@@ -214,7 +217,7 @@ angular.module('d3Playground')
     /* Time Text */ 
 
     svg.append('text')
-      .text($scope.eventSpots[$scope.currentIndex].time)
+      .text($scope.eventSpots[$scope.index.top].time)
       .attr('x', w/2)
       .attr('y', paddingWidth + 70)
       .attr('text-anchor', 'middle')
@@ -231,8 +234,9 @@ angular.module('d3Playground')
       .attr('height', 100)
       .style('fill', 'orange')
       .on('click', function() {
-        currentIndex = currentIndex + 1;
-        alert('forward' + ' ' + $scope.currentIndex);
+        $scope.index.top = Math.min($scope.index.top + 1, $scope.eventSpots.length);
+        $scope.index.bottom = Math.max($scope.index.top - 5, 0);
+        alert($scope.index.top + ' ' + $scope.index.bottom);
       });
 
     /* Back Button Box */
@@ -244,8 +248,9 @@ angular.module('d3Playground')
       .attr('height', 100)
       .style('fill', 'orange')
       .on('click', function() {
-        currentIndex = currentIndex - 1;
-        alert('back' + ' ' + $scope.currentIndex);
+        $scope.index.top = Math.max($scope.index.top - 1, 0);
+        $scope.index.bottom = Math.max($scope.index.top - 5, 0);
+        alert($scope.index.top + ' ' + $scope.index.bottom);
       });
 
 });
