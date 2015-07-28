@@ -3,7 +3,7 @@
 angular.module('d3Playground')
 .controller('TankCtrl', function ($scope) {
 
-    $scope.eventSpots = [ {time: '1:24', player: '1', type: 'pass', x: 100, y: 100},    
+    $scope.eventSpots = [ {time: '1:24', player: '1', type: 'shot', x: 100, y: 100},    
                           {time: '1:54', player: '2', type: 'pass', x: 200, y: 150},
                           {time: '2:24', player: '3', type: 'shot', x: 300, y: 200},
                           {time: '2:54', player: '4', type: 'pass', x: 400, y: 250},
@@ -25,234 +25,280 @@ angular.module('d3Playground')
       paddingWidth: 5
     };
 
-    var w = $scope.tankConfig.width;
-    var h =  $scope.tankConfig.height;
+    var clickLeftButton = function () {
+      $scope.index.top = Math.max($scope.index.top - 1, 0);
+      $scope.index.bottom = Math.max($scope.index.top - 5, 0);
 
-    var circleSize = $scope.tankConfig.circleSize;
-    var paddingWidth = $scope.tankConfig.paddingWidth;
+      var svg = $scope.body.select('svg');
 
+      svg.selectAll('circle')
+        .data($scope.eventSpots[$scope.index.top])
+        .exit()
+        .transition()
+        .duration(500)
+        .remove();
 
-    var svg = $scope.body.append('svg');
+      svg.selectAll('text')
+        .data($scope.eventSpots[$scope.index.top])
+        .exit()
+        .transition()
+        .duration(500)
+        .remove();
 
-    svg.attr('width', w);
-    svg.attr('height', h);
-    svg.style('border', '2px black solid');
+      update();
+    };
 
-    /* Tank */
+    var clickRightButton = function() {
+      $scope.index.top = Math.min($scope.index.top+1, $scope.eventSpots.length+1);
+      $scope.index.bottom = Math.max($scope.index.top - 5, 0);
 
-    svg.append('rect')
-      .attr('class', 'tank')
-      .attr('x', paddingWidth)
-      .attr('y', 100+(2*paddingWidth))
-      .attr('width', w-(3*paddingWidth))
-      .attr('height', (h-(100+(3*paddingWidth)+paddingWidth)));
+      var svg = $scope.body.select('svg');
 
-    /* Center Line*/
+      svg.selectAll('circle')
+        .data($scope.eventSpots[$scope.index.bottom])
+        .exit()
+        .transition()
+        .duration(500)
+        .remove();
 
-    svg.append('line')
-      .attr('x1', w*0.5)
-      .attr('y1', 100+2*paddingWidth)
-      .attr('x2', w*0.5)
-      .attr('y2', h-(2*paddingWidth))
-      .style('stroke-width', 10)
-      .style('stroke', 'white')
-      .style('opacity', '0.25')
-      .style('stroke-dasharray', ('20,5'));
+      svg.selectAll('text')
+        .data($scope.eventSpots[$scope.index.bottom])
+        .exit()
+        .transition()
+        .duration(500)
+        .remove();
 
-    /* Left 5m Line*/
+      update();
+    };
 
-    svg.append('line')
-      .attr('x1', w*0.15)
-      .attr('y1', 100+2*paddingWidth)
-      .attr('x2', w*0.15)
-      .attr('y2', h-(2*paddingWidth))
-      .style('stroke-width', 10)
-      .style('stroke', 'yellow')
-      .style('opacity', '0.25')
-      .style('stroke-dasharray', ('20,5'));
+    var update = function () {
 
-    /* Right 5m Line*/
+      var circleSize = $scope.tankConfig.circleSize;
+      var paddingWidth = $scope.tankConfig.paddingWidth;
 
-    svg.append('line')
-      .attr('x1', w*0.85)
-      .attr('y1', 100+2*paddingWidth)
-      .attr('x2', w*0.85)
-      .attr('y2', h-(2*paddingWidth))
-      .style('stroke-width', 10)
-      .style('stroke', 'yellow')
-      .style('opacity', '0.25')
-      .style('stroke-dasharray', ('20,5'));
+      var svg = $scope.body.select('svg');
 
-    /* Left 2m Line*/
+      /* Event Circles */
 
-    svg.append('line')
-      .attr('x1', w*0.05)
-      .attr('y1', 100+2*paddingWidth)
-      .attr('x2', w*0.05)
-      .attr('y2', h-(2*paddingWidth))
-      .style('stroke-width', 10)
-      .style('stroke', 'red')
-      .style('opacity', '0.25')
-      .style('stroke-dasharray', ('20,5'));
+      svg.selectAll('svg')
+        .data($scope.eventSpots.slice($scope.index.bottom, $scope.index.top))
+        .enter()
+        .append('circle')
+        .attr('cx', function (d) { return d.x + paddingWidth; })
+        .attr('cy', function (d) { return d.y + 100 + 2*paddingWidth; })
+        .attr('r', circleSize)
+        .style('fill','rgba(255, 255, 255, 1)')
+        .style('stroke', 'rgba(100, 100, 100, 1)')
+        .style('stroke-width', function(d) {
+          if (d.type === 'pass') {
+            return '0';
+          }
+          else {
+            return '4';
+          }});
 
-    /* Right 2m Line*/
+      /* Player Numbers */
 
-    svg.append('line')
-      .attr('x1', w*0.95)
-      .attr('y1', 100+2*paddingWidth)
-      .attr('x2', w*0.95)
-      .attr('y2', h-(2*paddingWidth))
-      .style('stroke-width', 10)
-      .style('stroke', 'red')
-      .style('opacity', '0.25')
-      .style('stroke-dasharray', ('20,5'));
+      svg.selectAll('svg')
+        .data($scope.eventSpots.slice($scope.index.bottom, $scope.index.top))
+        .enter()
+        .append('text')
+        .text(function(d) {return d.player; })
+        .attr('x', function (d) { return d.x + paddingWidth; })
+        .attr('y', function (d) { return d.y + 100 + 4*paddingWidth; })
+        .attr('font-family', 'arial')
+        .attr('font-size', '30px')
+        .style('fill', 'rgba(0, 0, 0, 1)')
+        .attr('text-anchor', 'middle');
+    };
 
+    /* Draw the Tank */
 
-    /* Left Goal */
+    var draw = function () {
 
-    svg.append('line')
-      .attr('x1', w*0.01)
-      .attr('y1', 50+(h*0.5)-50)
-      .attr('x2', w*0.01)
-      .attr('y2', 50+(h*0.5)+50)
-      .style('stroke-width', 20)
-      .style('stroke', 'white');
+      var w = $scope.tankConfig.width;
+      var h = $scope.tankConfig.height;
 
-    /* Right Goal */
+      var paddingWidth = $scope.tankConfig.paddingWidth;
 
-    svg.append('line')
-      .attr('x1', w*0.99)
-      .attr('y1', 50+(h*0.5)-50)
-      .attr('x2', w*0.99)
-      .attr('y2', 50+(h*0.5)+50)
-      .style('stroke-width', 20)
-      .style('stroke', 'white');
+      var svg = $scope.body.append('svg');
 
-    /* Event Circles */
+      svg.attr('width', w);
+      svg.attr('height', h);
+      svg.style('border', '2px black solid');
 
-    svg.selectAll('circle')
-      .data($scope.eventSpots.slice($scope.index.botom, $scope.index.top))
-      .enter()
-      .append('circle')
-      .attr('cx', function (d) { return d.x + paddingWidth; })
-      .attr('cy', function (d) { return d.y + 100 + 2*paddingWidth; })
-      .attr('r', circleSize)
-      .style('fill', function(d, i) {
-        return 'rgba(255, 255, 255, ' + Math.max(0, (7-i)*0.2) + ')';
-      })
-      .style('stroke', function(d, i) {
-        return 'rgba(0, 0, 0, ' + Math.max(0, (7-i)*0.2) + ')';
-      })
-      .style('stroke-width', function(d) {
-        if (d.type === 'pass') {
-          return '0';
-        }
-        else {
-          return '4';
-        }});
+      /* Tank */
 
-    /* Player Numbers */
+      svg.append('rect')
+        .attr('class', 'tank')
+        .attr('x', paddingWidth)
+        .attr('y', 100+(2*paddingWidth))
+        .attr('width', w-(3*paddingWidth))
+        .attr('height', (h-(100+(3*paddingWidth)+paddingWidth)));
 
-    svg.selectAll('text')
-      .data($scope.eventSpots.slice($scope.index.botom, $scope.index.top))
-      .enter()
-      .append('text')
-      .text(function(d) {return d.player; })
-      .attr('x', function (d) { return d.x + paddingWidth; })
-      .attr('y', function (d) { return d.y + 100 + 4*paddingWidth; })
-      .attr('font-family', 'arial')
-      .attr('font-size', '30px')
-      .style('fill', function(d, i) {
-        return 'rgba(0, 0, 0, ' + Math.max(0, (5-i)*0.2) + ')';
-      })
-      .attr('text-anchor', 'middle');
+      /* Center Line */
 
-    /* Left Score Box */
+      svg.append('line')
+        .attr('x1', w*0.5)
+        .attr('y1', 100+2*paddingWidth)
+        .attr('x2', w*0.5)
+        .attr('y2', h-(2*paddingWidth))
+        .style('stroke-width', 10)
+        .style('stroke', 'white')
+        .style('opacity', '0.25')
+        .style('stroke-dasharray', ('20,5'));
 
-    svg.append('rect')
-      .attr('x', paddingWidth)
-      .attr('y', paddingWidth)
-      .attr('width', 100)
-      .attr('height', 100)
-      .style('fill', d3.rgb( 200, 0, 0));
+      /* Left 5m Line*/
 
-    /* Left Score Text */
+      svg.append('line')
+        .attr('x1', w*0.15)
+        .attr('y1', 100+2*paddingWidth)
+        .attr('x2', w*0.15)
+        .attr('y2', h-(2*paddingWidth))
+        .style('stroke-width', 10)
+        .style('stroke', 'yellow')
+        .style('opacity', '0.25')
+        .style('stroke-dasharray', ('20,5'));
 
-    svg.append('text')
-      .text('4')
-      .attr('x', paddingWidth + 50)
-      .attr('y', paddingWidth + 70)
-      .attr('class', 'score-text')
-      .attr('text-anchor', 'middle');
+      /* Right 5m Line*/
 
-    /* Right Score Box */
+      svg.append('line')
+        .attr('x1', w*0.85)
+        .attr('y1', 100+2*paddingWidth)
+        .attr('x2', w*0.85)
+        .attr('y2', h-(2*paddingWidth))
+        .style('stroke-width', 10)
+        .style('stroke', 'yellow')
+        .style('opacity', '0.25')
+        .style('stroke-dasharray', ('20,5'));
 
-    svg.append('rect')
-      .attr('class', 'score-box')
-      .attr('x', (w-100)-2*paddingWidth)
-      .attr('y', paddingWidth)
-      .attr('width', 100)
-      .attr('height', 100)
-      .style('fill', d3.rgb( 0, 200, 0));
+      /* Left 2m Line*/
 
-    /* Right Score Text */
+      svg.append('line')
+        .attr('x1', w*0.05)
+        .attr('y1', 100+2*paddingWidth)
+        .attr('x2', w*0.05)
+        .attr('y2', h-(2*paddingWidth))
+        .style('stroke-width', 10)
+        .style('stroke', 'red')
+        .style('opacity', '0.25')
+        .style('stroke-dasharray', ('20,5'));
 
-    svg.append('text')
-      .text('2')
-      .attr('x', (w-100)-paddingWidth + 50)
-      .attr('y', paddingWidth + 70)
-      .attr('class', 'score-text')
-      .attr('text-anchor', 'middle');
+      /* Right 2m Line*/
+
+      svg.append('line')
+        .attr('x1', w*0.95)
+        .attr('y1', 100+2*paddingWidth)
+        .attr('x2', w*0.95)
+        .attr('y2', h-(2*paddingWidth))
+        .style('stroke-width', 10)
+        .style('stroke', 'red')
+        .style('opacity', '0.25')
+        .style('stroke-dasharray', ('20,5'));
 
 
-    /* Time Box */
+      /* Left Goal */
 
-    svg.append('rect')
-      .attr('x', (w/2 - 100))
-      .attr('y', paddingWidth)
-      .attr('width', 200)
-      .attr('height', 100)
-      .style('fill', 'grey');
+      svg.append('line')
+        .attr('x1', w*0.01)
+        .attr('y1', 50+(h*0.5)-50)
+        .attr('x2', w*0.01)
+        .attr('y2', 50+(h*0.5)+50)
+        .style('stroke-width', 20)
+        .style('stroke', 'white');
 
-    /* Time Text */ 
+      /* Right Goal */
 
-    svg.append('text')
-      .text($scope.eventSpots[$scope.index.top].time)
-      .attr('x', w/2)
-      .attr('y', paddingWidth + 70)
-      .attr('text-anchor', 'middle')
-      .attr('font-family', 'sans-serif')
-      .attr('font-size', '60px')
-      .attr('fill', 'white');
+      svg.append('line')
+        .attr('x1', w*0.99)
+        .attr('y1', 50+(h*0.5)-50)
+        .attr('x2', w*0.99)
+        .attr('y2', 50+(h*0.5)+50)
+        .style('stroke-width', 20)
+        .style('stroke', 'white');
 
-    /* Forward Button Box */
+      /* Left Score Box */
 
-    svg.append('rect')
-      .attr('x', w*0.50 + (250-100))
-      .attr('y', paddingWidth)
-      .attr('width', 100)
-      .attr('height', 100)
-      .style('fill', 'orange')
-      .on('click', function() {
-        $scope.index.top = Math.min($scope.index.top + 1, $scope.eventSpots.length);
-        $scope.index.bottom = Math.max($scope.index.top - 5, 0);
-        alert($scope.index.top + ' ' + $scope.index.bottom);
-      });
+      svg.append('rect')
+        .attr('class', 'score-box')
+        .attr('x', paddingWidth)
+        .attr('y', paddingWidth)
+        .attr('width', 100)
+        .attr('height', 100)
+        .style('fill', d3.rgb( 200, 0, 0));
 
-    /* Back Button Box */
+      /* Left Score Text */
 
-    svg.append('rect')
-      .attr('x', w*0.5 - 250)
-      .attr('y', paddingWidth)
-      .attr('width', 100)
-      .attr('height', 100)
-      .style('fill', 'orange')
-      .on('click', function() {
-        $scope.index.top = Math.max($scope.index.top - 1, 0);
-        $scope.index.bottom = Math.max($scope.index.top - 5, 0);
-        alert($scope.index.top + ' ' + $scope.index.bottom);
-      });
+      svg.append('text')
+        .text('4')
+        .attr('x', paddingWidth + 50)
+        .attr('y', paddingWidth + 70)
+        .attr('class', 'score-text')
+        .attr('text-anchor', 'middle');
 
+      /* Right Score Box */
+
+      svg.append('rect')
+        .attr('class', 'score-box')
+        .attr('x', (w-100)-2*paddingWidth)
+        .attr('y', paddingWidth)
+        .attr('width', 100)
+        .attr('height', 100)
+        .style('fill', d3.rgb( 0, 200, 0));
+
+      /* Right Score Text */
+
+      svg.append('text')
+        .text('2')
+        .attr('x', (w-100)-paddingWidth + 50)
+        .attr('y', paddingWidth + 70)
+        .attr('class', 'score-text')
+        .attr('text-anchor', 'middle');
+
+
+      /* Time Box */
+
+      svg.append('rect')
+        .attr('x', (w/2 - 100))
+        .attr('y', paddingWidth)
+        .attr('width', 200)
+        .attr('height', 100)
+        .style('fill', 'grey');
+
+      // /* Time Text */ 
+
+      // svg.append('text')
+      //   .text($scope.eventSpots[$scope.index.top].time)
+      //   .attr('x', w/2)
+      //   .attr('y', paddingWidth + 70)
+      //   .attr('text-anchor', 'middle')
+      //   .attr('font-family', 'sans-serif')
+      //   .attr('font-size', '60px')
+      //   .attr('fill', 'white');
+
+      /* Forward Button Box */
+
+      svg.append('rect')
+        .attr('x', w*0.50 + (250-100))
+        .attr('y', paddingWidth)
+        .attr('width', 100)
+        .attr('height', 100)
+        .style('fill', 'orange')
+        .on('click', clickRightButton);
+
+      /* Back Button Box */
+
+      svg.append('rect')
+        .attr('x', w*0.5 - 250)
+        .attr('y', paddingWidth)
+        .attr('width', 100)
+        .attr('height', 100)
+        .style('fill', 'orange')
+        .on('click', clickLeftButton);
+    };
+
+    draw();
+    update();
 });
 
 angular.module('d3Playground')
