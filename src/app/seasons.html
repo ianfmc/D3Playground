@@ -1,0 +1,15 @@
+<div class="container" ng-controller='SeasonsCtrl'>
+
+  <h1>Seasons Page</h1>
+  <select ng-model="selectedSeason>
+    <option ng-repeat='season in seasons' value="{{season.name}}">{{season.name}}</option>
+  </select>
+  <br>
+
+  <hr>
+  <div class="footer">
+  	<a href="#/">Main Page</a><br>
+    <p>With ♥ from <a href="https://twitter.com/rewind_polo">@rewind_polo</a></p>
+  </div>
+
+</div>

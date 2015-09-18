@@ -3,18 +3,22 @@
 angular.module('d3Playground')
 .controller('TankCtrl', function ($scope) {
 
-    $scope.eventSpots = [ {time: '1:24', player: '1', type: 'shot', x: 100, y: 100},    
-                          {time: '1:54', player: '2', type: 'pass', x: 200, y: 150},
-                          {time: '2:24', player: '3', type: 'shot', x: 300, y: 200},
-                          {time: '2:54', player: '4', type: 'pass', x: 400, y: 250},
-                          {time: '3:24', player: '5', type: 'pass', x: 500, y: 300},
-                          {time: '3:54', player: '6', type: 'pass', x: 600, y: 350},
-                          {time: '4:24', player: '7', type: 'pass', x: 700, y: 300} ];
+    $scope.teams = [  {name: 'Red Barons', color: '200, 40, 40'},
+                      {name: 'Blue Bombers', color: '50, 50, 200'} ];
 
+    $scope.eventSpots = [ {team: 0, time: '1:24', player: '1', type: 'shot', x: 100, y: 100},    
+                          {team: 0, time: '1:54', player: '2', type: 'pass', x: 200, y: 150},
+                          {team: 0, time: '2:24', player: '3', type: 'shot', x: 300, y: 200},
+                          {team: 1, time: '2:54', player: '4', type: 'pass', x: 400, y: 250},
+                          {team: 1, time: '3:24', player: '5', type: 'pass', x: 500, y: 300},
+                          {team: 1, time: '3:54', player: '6', type: 'pass', x: 600, y: 350},
+                          {team: 1, time: '4:24', player: '7', type: 'pass', x: 700, y: 300},
+                          {team: 1, time: '4:54', player: '8', type: 'goal', x: 800, y: 250},
+                          {team: 0, time: '5:24', player: '2', type: 'steal', x: 700, y: 200} ];
 
     $scope.body = d3.select('#tank');
     $scope.index = {
-      top: 0,
+      top: -1,
       bottom: 0
     };
 
@@ -27,19 +31,19 @@ angular.module('d3Playground')
 
     var clickLeftButton = function () {
       $scope.index.top = Math.max($scope.index.top - 1, 0);
-      $scope.index.bottom = Math.max($scope.index.top - 5, 0);
+      $scope.index.bottom = Math.max($scope.index.top - 4, 0);
 
       var svg = $scope.body.select('svg');
 
-      svg.selectAll('circle')
+      svg.selectAll('.event')
         .data($scope.eventSpots[$scope.index.top])
         .exit()
         .transition()
         .duration(500)
         .remove();
 
-      svg.selectAll('text')
-        .data($scope.eventSpots[$scope.index.top])
+      svg.selectAll('.player-number')
+        .data($scope.eventSpots[$scope.index.bottom])
         .exit()
         .transition()
         .duration(500)
@@ -49,19 +53,19 @@ angular.module('d3Playground')
     };
 
     var clickRightButton = function() {
-      $scope.index.top = Math.min($scope.index.top+1, $scope.eventSpots.length+1);
-      $scope.index.bottom = Math.max($scope.index.top - 5, 0);
+      $scope.index.top = Math.min($scope.index.top+1, $scope.eventSpots.length);
+      $scope.index.bottom = Math.max($scope.index.top - 4, 0);
 
       var svg = $scope.body.select('svg');
 
-      svg.selectAll('circle')
+      svg.selectAll('.event')
         .data($scope.eventSpots[$scope.index.bottom])
         .exit()
         .transition()
         .duration(500)
         .remove();
 
-      svg.selectAll('text')
+      svg.selectAll('.player-number')
         .data($scope.eventSpots[$scope.index.bottom])
         .exit()
         .transition()
@@ -69,47 +73,114 @@ angular.module('d3Playground')
         .remove();
 
       update();
+
+      return;
     };
 
+    /* Update the Events */
+
     var update = function () {
+
+      var w = $scope.tankConfig.width;
 
       var circleSize = $scope.tankConfig.circleSize;
       var paddingWidth = $scope.tankConfig.paddingWidth;
 
       var svg = $scope.body.select('svg');
 
-      /* Event Circles */
+
+      /* Event Circles for passes, shots and goals */
 
       svg.selectAll('svg')
-        .data($scope.eventSpots.slice($scope.index.bottom, $scope.index.top))
+        .data($scope.eventSpots.slice($scope.index.bottom, $scope.index.top+1))
         .enter()
         .append('circle')
         .attr('cx', function (d) { return d.x + paddingWidth; })
         .attr('cy', function (d) { return d.y + 100 + 2*paddingWidth; })
-        .attr('r', circleSize)
+        .attr('r', function (d) {
+          if (d.type !== 'steal') {
+            return circleSize;
+          }
+          else {
+            return 0;
+          }})
+        .attr('class', 'event')
         .style('fill','rgba(255, 255, 255, 1)')
-        .style('stroke', 'rgba(100, 100, 100, 1)')
+        .style('stroke', function(d) {return 'rgb(' + $scope.teams[d.team].color + ')';})
+        .style('stroke-width', '10');
+
+      /* Draw a 'Halo' for a Shot or a Goal */
+
+      svg.selectAll('svg')
+        .data($scope.eventSpots.slice($scope.index.bottom, $scope.index.top+1))
+        .enter()
+        .append('circle')
+        .attr('cx', function (d) { return d.x + paddingWidth; })
+        .attr('cy', function (d) { return d.y + 100 + 2*paddingWidth; })
+        .attr('r', circleSize+8)
+        .attr('class', 'event')
+        .style('fill','rgba(255, 255, 255, 0)')
+        .style('stroke', function(d) {return 'rgb(' + $scope.teams[d.team].color + ')';})
         .style('stroke-width', function(d) {
           if (d.type === 'pass') {
             return '0';
           }
+          else if (d.type === 'steal') {
+            return '0';
+          }
           else {
-            return '4';
-          }});
+            return '2';
+          }
+        });
+
+      /* Squares for a Steal */
+
+      svg.selectAll('svg')
+        .data($scope.eventSpots.slice($scope.index.bottom, $scope.index.top+1))
+        .enter()
+        .append('rect')
+        .attr('width', function (d) {
+          if (d.type === 'steal') {
+            return 2*circleSize;
+          }
+          else {
+            return 0;
+          }})
+        .attr('height', function (d) {
+          if (d.type === 'steal') {
+            return 2*circleSize;
+          }
+          else {
+            return 0;
+          }})
+        .attr('x', function (d) {return d.x + paddingWidth - circleSize;})
+        .attr('y', function (d) {return d.y + 100 + 2*paddingWidth - circleSize;})
+        .attr('class', 'event')
+        .style('fill','rgba(255, 255, 255, 1)')
+        .style('stroke', function(d) {return 'rgb(' + $scope.teams[d.team].color + ')';})
+        .style('stroke-width', '10');    
 
       /* Player Numbers */
 
       svg.selectAll('svg')
-        .data($scope.eventSpots.slice($scope.index.bottom, $scope.index.top))
+        .data($scope.eventSpots.slice($scope.index.bottom, $scope.index.top+1))
         .enter()
         .append('text')
         .text(function(d) {return d.player; })
+        .attr('class', 'player-number')
         .attr('x', function (d) { return d.x + paddingWidth; })
         .attr('y', function (d) { return d.y + 100 + 4*paddingWidth; })
         .attr('font-family', 'arial')
         .attr('font-size', '30px')
         .style('fill', 'rgba(0, 0, 0, 1)')
         .attr('text-anchor', 'middle');
+
+      /* Update Time */
+
+      svg.select('#time-left')
+        .text(function () {return $scope.eventSpots[$scope.index.top].time; })
+        .attr('x', w/2)
+        .attr('y', paddingWidth + 70);  
     };
 
     /* Draw the Tank */
@@ -225,7 +296,7 @@ angular.module('d3Playground')
         .attr('y', paddingWidth)
         .attr('width', 100)
         .attr('height', 100)
-        .style('fill', d3.rgb( 200, 0, 0));
+        .style('fill', function () {return 'rgb(' + $scope.teams[0].color +')';});
 
       /* Left Score Text */
 
@@ -244,7 +315,7 @@ angular.module('d3Playground')
         .attr('y', paddingWidth)
         .attr('width', 100)
         .attr('height', 100)
-        .style('fill', d3.rgb( 0, 200, 0));
+        .style('fill', function () {return 'rgb(' + $scope.teams[1].color +')';});
 
       /* Right Score Text */
 
@@ -265,16 +336,17 @@ angular.module('d3Playground')
         .attr('height', 100)
         .style('fill', 'grey');
 
-      // /* Time Text */ 
+      /* Time Text */ 
 
-      // svg.append('text')
-      //   .text($scope.eventSpots[$scope.index.top].time)
-      //   .attr('x', w/2)
-      //   .attr('y', paddingWidth + 70)
-      //   .attr('text-anchor', 'middle')
-      //   .attr('font-family', 'sans-serif')
-      //   .attr('font-size', '60px')
-      //   .attr('fill', 'white');
+      svg.append('text')
+        .text('0:00')
+        .attr('x', w/2)
+        .attr('y', paddingWidth + 70)
+        .attr('id', 'time-left')
+        .attr('text-anchor', 'middle')
+        .attr('font-family', 'sans-serif')
+        .attr('font-size', '60px')
+        .attr('fill', 'white');
 
       /* Forward Button Box */
 
@@ -283,7 +355,7 @@ angular.module('d3Playground')
         .attr('y', paddingWidth)
         .attr('width', 100)
         .attr('height', 100)
-        .style('fill', 'orange')
+        .style('fill', 'grey')
         .on('click', clickRightButton);
 
       /* Back Button Box */
@@ -293,67 +365,50 @@ angular.module('d3Playground')
         .attr('y', paddingWidth)
         .attr('width', 100)
         .attr('height', 100)
-        .style('fill', 'orange')
+        .style('fill', 'grey')
         .on('click', clickLeftButton);
     };
 
     draw();
-    update();
+});
+
+angular.module('d3Playground')
+.controller('TeamsCtrl', function ($scope, $routeParams) {
+
+    $scope.selectedTeamName = 'NA';
+    $scope.teams = [{   name: 'Red Barons', 
+                        color: '200, 40, 40', 
+                        roster:  [{firstName: 'Pete', lastName: 'Smith', cap: '1'},
+                                  {firstName: 'Sam', lastName: 'Jones', cap: '2'}]
+                                },
+
+                    {   name: 'Blue Bombers', 
+                        color: '50, 50, 200', 
+                        roster: [{firstName: 'Joe', lastName: 'Miller', cap: '1'},
+                                 {firstName: 'Al', lastName: 'Long', cap: '2'}]
+                               }];
+
+    $scope.selectedTeam = $scope.teams[0];
+    $scope.changed = function () {
+      $scope.selectedTeam = $scope.teams.filter (function(teamName) {return teamName==$scope.selectedTeamName})[0];
+    };
+});
+
+angular.module('d3Playground')
+.controller('TeamCtrl', function ($scope, $routeParams) {
+
+    $scope.roster = [ ,
+                      {firstName: 'Sam', lastName: 'Jones', color: '200, 40, 40'} ];  
+});
+
+angular.module('d3Playground')
+.controller('SeasonsCtrl', function ($scope, $routeParams) {
+
+    $scope.seasons = [ {name: '2015 Spring Season'},
+                      {name: '2015 Junior Olympic Season'}];  
 });
 
 angular.module('d3Playground')
   .controller('MainCtrl', function ($scope) {
-    $scope.awesomeThings = [
-      {
-        'title': 'AngularJS',
-        'url': 'https://angularjs.org/',
-        'description': 'HTML enhanced for web apps!',
-        'logo': 'angular.png'
-      },
-      {
-        'title': 'BrowserSync',
-        'url': 'http://browsersync.io/',
-        'description': 'Time-saving synchronised browser testing.',
-        'logo': 'browsersync.png'
-      },
-      {
-        'title': 'GulpJS',
-        'url': 'http://gulpjs.com/',
-        'description': 'The streaming build system.',
-        'logo': 'gulp.png'
-      },
-      {
-        'title': 'Jasmine',
-        'url': 'http://jasmine.github.io/',
-        'description': 'Behavior-Driven JavaScript.',
-        'logo': 'jasmine.png'
-      },
-      {
-        'title': 'Karma',
-        'url': 'http://karma-runner.github.io/',
-        'description': 'Spectacular Test Runner for JavaScript.',
-        'logo': 'karma.png'
-      },
-      {
-        'title': 'Protractor',
-        'url': 'https://github.com/angular/protractor',
-        'description': 'End to end test framework for AngularJS applications built on top of WebDriverJS.',
-        'logo': 'protractor.png'
-      },
-      {
-        'title': 'Bootstrap',
-        'url': 'http://getbootstrap.com/',
-        'description': 'Bootstrap is the most popular HTML, CSS, and JS framework for developing responsive, mobile first projects on the web.',
-        'logo': 'bootstrap.png'
-      },
-      {
-        'title': 'Angular UI Bootstrap',
-        'url': 'http://angular-ui.github.io/bootstrap/',
-        'description': 'Bootstrap components written in pure AngularJS by the AngularUI Team.',
-        'logo': 'ui-bootstrap.png'
-      }
-    ];
-    angular.forEach($scope.awesomeThings, function(awesomeThing) {
-      awesomeThing.rank = Math.random();
-    });
-  });
+    // console.log($scope);
+});
