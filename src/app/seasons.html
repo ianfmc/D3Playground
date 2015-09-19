@@ -1,10 +1,26 @@
 <div class="container" ng-controller='SeasonsCtrl'>
 
   <h1>Seasons Page</h1>
-  <select ng-model="selectedSeason>
-    <option ng-repeat='season in seasons' value="{{season.name}}">{{season.name}}</option>
+  <select class="ng-valid ng-dirty" ng-model="selectedSeasonName" ng-change="changed()" ng-options="season.name for season in seasons">
+    <option value="" ng-if="false"></option>
   </select>
   <br>
+
+  <br>
+  <h2>{{selectedSeason.name}}</h2>
+  <hr>
+
+  <table width="75%">
+    <tr aligh="left">
+      <td>Opponent</td>
+      <td>Date</td>
+      <td>Score</td>
+    </tr>
+    <tr ng-repeat="game in selectedSeason.schedule">
+      <td>{{game.opponent}}</td>
+      <td>{{game.date}}</td>
+      <td>{{game.score}}
+  </table>
 
   <hr>
   <div class="footer">

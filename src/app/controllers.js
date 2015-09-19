@@ -373,6 +373,65 @@ angular.module('d3Playground')
 });
 
 angular.module('d3Playground')
+.factory('seasonsService', function() {
+
+  var seasonsList = {};
+  seasonsList.list = [{ id: 0,
+                        name: '2015 Spring Season'
+                      },
+                      { id: 1,
+                        name: '2015 Junior Olympic Season'
+                      }];  
+
+  seasonsList.get = function() {
+    return seasonsList.list;
+  };
+
+  return seasonsList;
+});
+
+angular.module('d3Playground')
+.factory('teamsService', function() {
+
+  var teamList = {};
+  teamList.list = [{  id: 0,
+                      name: 'Red Barons', 
+                      color: '200, 40, 40', 
+                      roster:  [{firstName: 'Pete', lastName: 'Smith', cap: '1'},
+                                  {firstName: 'Sam', lastName: 'Jones', cap: '2'}]
+                    },
+                    { id: 1,
+                      name: 'Blue Bombers', 
+                      color: '50, 50, 200', 
+                      roster: [{firstName: 'Joe', lastName: 'Miller', cap: '1'},
+                               {firstName: 'Al', lastName: 'Long', cap: '2'}]
+                    }];
+
+  teamList.get = function() {
+    return teamList.list;
+  };
+
+  return teamList;
+});
+
+angular.module('d3Playground')
+.controller('SeasonsCtrl', function ($scope, $routeParams, seasonsService) {
+
+    $scope.seasons = seasonsService.get();
+    $scope.selectedSeason = $scope.seasons[0];
+    $scope.selectedSeasonName = $scope.selectedSeason;
+    
+    $scope.changed = function () {
+       $scope.selectedSeason = $scope.seasons.filter(function(value) {
+        if (value===$scope.selectedSeasonName) {
+          return true;
+        }
+      })[0];
+    };
+
+});
+
+angular.module('d3Playground')
 .controller('TeamsCtrl', function ($scope, $routeParams, teamsService) {
 
     $scope.teams = teamsService.get();
@@ -389,39 +448,10 @@ angular.module('d3Playground')
   });
 
 angular.module('d3Playground')
-.factory('teamsService', function() {
-
-  var teamList = {};
-  teamList.list = [{   name: 'Red Barons', 
-                        color: '200, 40, 40', 
-                        roster:  [{firstName: 'Pete', lastName: 'Smith', cap: '1'},
-                                  {firstName: 'Sam', lastName: 'Jones', cap: '2'}]
-                    },
-                    {   name: 'Blue Bombers', 
-                        color: '50, 50, 200', 
-                        roster: [{firstName: 'Joe', lastName: 'Miller', cap: '1'},
-                               {firstName: 'Al', lastName: 'Long', cap: '2'}]
-                    }];
-
-  teamList.get = function() {
-    return teamList.list;
-  };
-
-  return teamList;
-});
-
-angular.module('d3Playground')
 .controller('TeamCtrl', function ($scope, $routeParams) {
 
   //
  
-});
-
-angular.module('d3Playground')
-.controller('SeasonsCtrl', function ($scope, $routeParams) {
-
-    $scope.seasons = [ {name: '2015 Spring Season'},
-                      {name: '2015 Junior Olympic Season'}];  
 });
 
 angular.module('d3Playground')
