@@ -373,32 +373,48 @@ angular.module('d3Playground')
 });
 
 angular.module('d3Playground')
-.controller('TeamsCtrl', function ($scope, $routeParams) {
+.controller('TeamsCtrl', function ($scope, $routeParams, teamsService) {
 
-    $scope.selectedTeamName = 'NA';
-    $scope.teams = [{   name: 'Red Barons', 
+    $scope.teams = teamsService.get();
+    $scope.selectedTeam = $scope.teams[0];
+    $scope.selectedTeamName = $scope.selectedTeam;
+    
+    $scope.changed = function () {
+       $scope.selectedTeam = $scope.teams.filter(function(value) {
+        if (value===$scope.selectedTeamName) {
+          return true;
+        }
+      })[0];
+    };
+  });
+
+angular.module('d3Playground')
+.factory('teamsService', function() {
+
+  var teamList = {};
+  teamList.list = [{   name: 'Red Barons', 
                         color: '200, 40, 40', 
                         roster:  [{firstName: 'Pete', lastName: 'Smith', cap: '1'},
                                   {firstName: 'Sam', lastName: 'Jones', cap: '2'}]
-                                },
-
+                    },
                     {   name: 'Blue Bombers', 
                         color: '50, 50, 200', 
                         roster: [{firstName: 'Joe', lastName: 'Miller', cap: '1'},
-                                 {firstName: 'Al', lastName: 'Long', cap: '2'}]
-                               }];
+                               {firstName: 'Al', lastName: 'Long', cap: '2'}]
+                    }];
 
-    $scope.selectedTeam = $scope.teams[0];
-    $scope.changed = function () {
-      $scope.selectedTeam = $scope.teams.filter (function(teamName) {return teamName==$scope.selectedTeamName})[0];
-    };
+  teamList.get = function() {
+    return teamList.list;
+  };
+
+  return teamList;
 });
 
 angular.module('d3Playground')
 .controller('TeamCtrl', function ($scope, $routeParams) {
 
-    $scope.roster = [ ,
-                      {firstName: 'Sam', lastName: 'Jones', color: '200, 40, 40'} ];  
+  //
+ 
 });
 
 angular.module('d3Playground')
@@ -410,5 +426,7 @@ angular.module('d3Playground')
 
 angular.module('d3Playground')
   .controller('MainCtrl', function ($scope) {
-    // console.log($scope);
+    
+  //
+
 });

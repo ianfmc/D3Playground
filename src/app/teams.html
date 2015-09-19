@@ -1,11 +1,13 @@
 <div class="container" ng-controller='TeamsCtrl'>
 
   <h1>Teams Page</h1>
-  <select ng-model="selectedTeamName" ng-change="changed()" ng-options="team.name for team in teams"></select>
+  <select class="ng-valid ng-dirty" ng-model="selectedTeamName" ng-change="changed()" ng-options="team.name for team in teams">
+    <option value="" ng-if="false"></option>
+  </select>
   <br>
 
   <br>
-  <h2>Selected Team={{selectedTeam.name}}</h2><br>
+  <h2>{{selectedTeam.name}}</h2>
   <hr>
 
   <table width="75%">
