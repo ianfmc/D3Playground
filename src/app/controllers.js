@@ -394,17 +394,15 @@ angular.module('d3Playground')
 .factory('teamsService', function() {
 
   var teamList = {};
-  teamList.list = [{  id: 0,
+  teamList.list = [{  id: 1,
                       name: 'Red Barons', 
                       color: '200, 40, 40', 
-                      roster:  [{firstName: 'Pete', lastName: 'Smith', cap: '1'},
-                                  {firstName: 'Sam', lastName: 'Jones', cap: '2'}]
+                      roster: {}
                     },
-                    { id: 1,
+                    { id: 2,
                       name: 'Blue Bombers', 
                       color: '50, 50, 200', 
-                      roster: [{firstName: 'Joe', lastName: 'Miller', cap: '1'},
-                               {firstName: 'Al', lastName: 'Long', cap: '2'}]
+                      roster: {}
                     }];
 
   teamList.get = function() {
@@ -412,6 +410,32 @@ angular.module('d3Playground')
   };
 
   return teamList;
+});
+
+angular.module('d3Playground')
+.factory('playersService', function() {
+
+  var playerList = {};
+  playerList.list = [
+                      {id: 1, teamID: 1, firstName: 'Pete', lastName: 'Smith', cap: '1'},
+                      {id: 2, teamID: 1, firstName: 'Sam', lastName: 'Jones', cap: '2'},
+                      {id: 3, teamID: 2, firstName: 'Joe', lastName: 'Miller', cap: '1'},
+                      {id: 4, teamID: 2, firstName: 'Al', lastName: 'Long', cap: '2'}
+                    ];
+
+  playerList.get = function() {
+    return playerList.list;
+  };
+
+  playerList.getForTeam = function (id) {
+    return playerList.list.filter(function(value) {
+      if (value.teamID===id) {
+        return true;
+      }
+    });
+  };
+
+  return playerList;
 });
 
 angular.module('d3Playground')
@@ -432,11 +456,13 @@ angular.module('d3Playground')
 });
 
 angular.module('d3Playground')
-.controller('TeamsCtrl', function ($scope, $routeParams, teamsService) {
+.controller('TeamsCtrl', function ($scope, $routeParams, teamsService, playersService) {
 
     $scope.teams = teamsService.get();
     $scope.selectedTeam = $scope.teams[0];
     $scope.selectedTeamName = $scope.selectedTeam;
+
+    $scope.selectedTeam.roster = playersService.getForTeam($scope.selectedTeam.id);
     
     $scope.changed = function () {
        $scope.selectedTeam = $scope.teams.filter(function(value) {
@@ -444,15 +470,10 @@ angular.module('d3Playground')
           return true;
         }
       })[0];
+      $scope.selectedTeam.roster = playersService.getForTeam($scope.selectedTeam.id);
     };
   });
 
-angular.module('d3Playground')
-.controller('TeamCtrl', function ($scope, $routeParams) {
-
-  //
- 
-});
 
 angular.module('d3Playground')
   .controller('MainCtrl', function ($scope) {

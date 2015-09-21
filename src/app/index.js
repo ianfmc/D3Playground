@@ -11,19 +11,14 @@ angular.module('d3Playground', [
   .config(function ($routeProvider) {
     $routeProvider
       .when('/', {
-        templateUrl: 'app/main.html',
-        // template: '<h1>Tank Page </h1><br><a href="#/team">Switch to Team Page</a>',
-        // controller: 'MainCtrl'
-      })
+        templateUrl: 'app/welcome.html'
+        // controller: 'WelcomeCtrl'
+      })     
       .when('/teams', {
         templateUrl: 'app/teams.html'
-        // template: '<h1>Team Page </h1><br><a href="#/">Switch to Tank Page</a>',
-        // controller: 'TeamCtrl'
       })
-      .when('/team', {
-        templateUrl: 'app/team.html'
-        // template: '<h1>Team Page </h1><br><a href="#/">Switch to Tank Page</a>',
-        // controller: 'TeamCtrl'
+      .when('/tank', {
+        templateUrl: 'app/main.html'
       })
       .when('/seasons', {
         templateUrl: 'app/seasons.html'
