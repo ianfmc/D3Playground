@@ -13,13 +13,13 @@
   <table width="75%">
     <tr aligh="left">
       <td>Opponent</td>
-      <td>Date</td>
+      <td>Location</td>
       <td>Score</td>
     </tr>
-    <tr ng-repeat="game in selectedSeason.schedule">
+    <tr ng-repeat="game in selectedSeason.games">
       <td>{{game.opponent}}</td>
-      <td>{{game.date}}</td>
-      <td>{{game.score}}
+      <td>{{game.location}}</td>
+      <td>{{game.score}}</td>
   </table>
 
   <hr>

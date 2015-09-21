@@ -376,11 +376,13 @@ angular.module('d3Playground')
 .factory('seasonsService', function() {
 
   var seasonsList = {};
-  seasonsList.list = [{ id: 0,
-                        name: '2015 Spring Season'
+  seasonsList.list = [{ id: 1,
+                        name: '2015 Spring Season',
+                        games: {}
                       },
-                      { id: 1,
-                        name: '2015 Junior Olympic Season'
+                      { id: 2,
+                        name: '2015 Junior Olympic Season',
+                        games: {}
                       }];  
 
   seasonsList.get = function() {
@@ -388,6 +390,39 @@ angular.module('d3Playground')
   };
 
   return seasonsList;
+});
+
+angular.module('d3Playground')
+.factory('gamesService', function() {
+
+  var gamesList = {};
+  gamesList.list = [{ id: 1,
+                      seasonID: 1, 
+                      location: 'San Diego, CA',
+                      opponent: 'Red Barons',
+                      score: '13:12'
+                    },
+                    {
+                      id: 2,
+                      seasonID: 1, 
+                      location: 'Irvine, CA',
+                      opponent: 'Blue Bomber',
+                      score: '6:10'
+                    }];
+
+  gamesList.get = function() {
+    return gamesList.list;
+  };
+
+  gamesList.getForSeason = function (id) {
+    return gamesList.list.filter(function(value) {
+      if (value.seasonID===id) {
+        return true;
+      }
+    });
+  };
+
+  return gamesList;
 });
 
 angular.module('d3Playground')
@@ -439,11 +474,13 @@ angular.module('d3Playground')
 });
 
 angular.module('d3Playground')
-.controller('SeasonsCtrl', function ($scope, $routeParams, seasonsService) {
+.controller('SeasonsCtrl', function ($scope, $routeParams, seasonsService, gamesService) {
 
     $scope.seasons = seasonsService.get();
     $scope.selectedSeason = $scope.seasons[0];
     $scope.selectedSeasonName = $scope.selectedSeason;
+
+    $scope.selectedSeason.games = gamesService.getForSeason($scope.selectedSeason.id);
     
     $scope.changed = function () {
        $scope.selectedSeason = $scope.seasons.filter(function(value) {
