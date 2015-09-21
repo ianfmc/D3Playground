@@ -1,13 +1,12 @@
 <div class="container" ng-controller='TeamsCtrl'>
 
-  <h1>Teams Page</h1>
+  <br>
+  <h2>{{selectedTeam.name}}</h2>
+ 
   <select class="ng-valid ng-dirty" ng-model="selectedTeamName" ng-change="changed()" ng-options="team.name for team in teams">
     <option value="" ng-if="false"></option>
   </select>
   <br>
-
-  <br>
-  <h2>{{selectedTeam.name}}</h2>
   <hr>
 
   <table width="75%">
@@ -22,9 +21,36 @@
   </table>
 
   <hr>
+</div>
+
+<div class="container" ng-controller='SeasonsCtrl'>
+
+
+  <br>
+  <h2>{{selectedSeason.name}}</h2>
+  <select class="ng-valid ng-dirty" ng-model="selectedSeasonName" ng-change="changed()" ng-options="season.name for season in seasons">
+    <option value="" ng-if="false"></option>
+  </select>
+  <br>
+
+  <hr>
+
+  <table width="75%">
+    <tr aligh="left">
+      <td>Opponent</td>
+      <td>Location</td>
+      <td>Score</td>
+    </tr>
+    <tr ng-repeat="game in selectedSeason.games">
+      <td>{{game.opponent}}</td>
+      <td>{{game.location}}</td>
+      <td>{{game.score}}</td>
+  </table>
+
+  <hr>
   <div class="footer">
     <a href="#/">Home Page</a><br>
-    <a href="#/seasons">Seasons Page</a><br>
+    <a href="#/teams">Teams Page</a><br>
     <a href="#/tank">Tank Page</a><br>
     <p>With ♥ from <a href="https://twitter.com/rewind_polo">@rewind_polo</a></p>
   </div>
