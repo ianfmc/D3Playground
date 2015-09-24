@@ -12,16 +12,17 @@ angular.module('d3Playground', [
     $routeProvider
       .when('/', {
         templateUrl: 'app/welcome.html'
-        // controller: 'WelcomeCtrl'
       })     
-      .when('/teams', {
-        templateUrl: 'app/teams.html'
-      })
       .when('/tank', {
-        templateUrl: 'app/main.html'
+        templateUrl: 'app/tank.html'
       })
       .when('/seasons', {
-        templateUrl: 'app/seasons.html'
+        templateUrl: 'app/seasons.html',
+        controller: 'SeasonsCtrl'
+      })
+      .when('/:teamName', {
+        templateUrl: 'app/team.html',
+        controller: 'TeamCtrl'
       })
       .otherwise({
         redirectTo: '/'
