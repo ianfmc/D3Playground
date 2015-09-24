@@ -1,10 +1,14 @@
 'use strict';
 
 angular.module('d3Playground')
-.controller('TankCtrl', function ($scope) {
+  .controller('NavbarCtrl', function ($scope) {
+    $scope.date = new Date();
+  });
 
-    $scope.teams = [  {name: 'Red Barons', color: '200, 40, 40'},
-                      {name: 'Blue Bombers', color: '50, 50, 200'} ];
+angular.module('d3Playground')
+.controller('TankCtrl', function ($scope, teamsService) {
+
+    $scope.teams = teamsService.get();
 
     $scope.eventSpots = [ {team: 0, time: '1:24', player: '1', type: 'shot', x: 100, y: 100},    
                           {team: 0, time: '1:54', player: '2', type: 'pass', x: 200, y: 150},
@@ -368,110 +372,32 @@ angular.module('d3Playground')
         .style('fill', 'grey')
         .on('click', clickLeftButton);
     };
-
     draw();
 });
 
 angular.module('d3Playground')
-.factory('seasonsService', function() {
+.controller('TeamsCtrl', function ($scope, teamsService) {
 
-  var seasonsList = {};
-  seasonsList.list = [{ id: 1,
-                        name: '2015 Spring Season',
-                        games: {}
-                      },
-                      { id: 2,
-                        name: '2015 Junior Olympic Season',
-                        games: {}
-                      }];  
-
-  seasonsList.get = function() {
-    return seasonsList.list;
-  };
-
-  return seasonsList;
-});
+    $scope.teams = teamsService.get();
+  
+  });
 
 angular.module('d3Playground')
-.factory('gamesService', function() {
+.controller('TeamCtrl', function ($scope, $routeParams, teamsService, playersService) {
 
-  var gamesList = {};
-  gamesList.list = [{ id: 1,
-                      seasonID: 1, 
-                      location: 'San Diego, CA',
-                      opponent: 'Red Barons',
-                      score: '13:12'
-                    },
-                    {
-                      id: 2,
-                      seasonID: 1, 
-                      location: 'Irvine, CA',
-                      opponent: 'Blue Bomber',
-                      score: '6:10'
-                    }];
+    $scope.selectedTeam = teamsService.getByName($routeParams.teamName);   
+    $scope.selectedTeam.roster = playersService.getForTeam($scope.selectedTeam.id);
+    
+    $scope.changed = function () {
+       $scope.selectedTeam = $scope.teams.filter(function(value) {
+        if (value===$scope.selectedTeamName) {
+          return true;
+        }
+      })[0];
+      $scope.selectedTeam.roster = playersService.getForTeam($scope.selectedTeam.id);
+    };
+  });
 
-  gamesList.get = function() {
-    return gamesList.list;
-  };
-
-  gamesList.getForSeason = function (id) {
-    return gamesList.list.filter(function(value) {
-      if (value.seasonID===id) {
-        return true;
-      }
-    });
-  };
-
-  return gamesList;
-});
-
-angular.module('d3Playground')
-.factory('teamsService', function() {
-
-  var teamList = {};
-  teamList.list = [{  id: 1,
-                      name: 'Red Barons', 
-                      color: '200, 40, 40', 
-                      roster: {}
-                    },
-                    { id: 2,
-                      name: 'Blue Bombers', 
-                      color: '50, 50, 200', 
-                      roster: {}
-                    }];
-
-  teamList.get = function() {
-    return teamList.list;
-  };
-
-  return teamList;
-});
-
-angular.module('d3Playground')
-.factory('playersService', function() {
-
-  var playerList = {};
-  playerList.list = [
-                      {id: 1, teamID: 1, firstName: 'Pete', lastName: 'Smith', cap: '1'},
-                      {id: 2, teamID: 1, firstName: 'Sam', lastName: 'Jones', cap: '2'},
-                      {id: 3, teamID: 2, firstName: 'Joe', lastName: 'Miller', cap: '1'},
-                      {id: 4, teamID: 2, firstName: 'Al', lastName: 'Long', cap: '2'}
-                    ];
-
-  playerList.get = function() {
-    return playerList.list;
-  };
-
-  playerList.getForTeam = function (id) {
-    return playerList.list.filter(function(value) {
-      if (value.teamID===id) {
-        return true;
-      }
-    });
-  };
-
-  return playerList;
-});
 
 angular.module('d3Playground')
 .controller('SeasonsCtrl', function ($scope, $routeParams, seasonsService, gamesService) {
@@ -489,32 +415,15 @@ angular.module('d3Playground')
         }
       })[0];
     };
-
-});
-
-angular.module('d3Playground')
-.controller('TeamsCtrl', function ($scope, $routeParams, teamsService, playersService) {
-
-    $scope.teams = teamsService.get();
-    $scope.selectedTeam = $scope.teams[0];
-    $scope.selectedTeamName = $scope.selectedTeam;
-
-    $scope.selectedTeam.roster = playersService.getForTeam($scope.selectedTeam.id);
-    
-    $scope.changed = function () {
-       $scope.selectedTeam = $scope.teams.filter(function(value) {
-        if (value===$scope.selectedTeamName) {
-          return true;
-        }
-      })[0];
-      $scope.selectedTeam.roster = playersService.getForTeam($scope.selectedTeam.id);
-    };
   });
 
-
 angular.module('d3Playground')
-  .controller('MainCtrl', function ($scope) {
+.controller('MainCtrl', function () {
     
   //
+  });
 
-});
+angular.module('d3Playground')
+.filter('encodeURI', function() {
+  return window.encodeURI;
+  });
