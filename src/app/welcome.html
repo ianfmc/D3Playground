@@ -1,17 +1,19 @@
 <div class="container-fluid" ng-controller='TeamsCtrl'>
 	<h1>Welcome to Rewind Polo Online</h1>
-	<div class="row">
-		<div class="md-col-12">
+	<h3>Select Your Team:</h3>
+	<div class="row" style="margin: 10px">
+		<div class="md-col-12" style="border: 1px solid gray">
 			<div ng-repeat="team in teams"><a href="#/{{team.name | encodeURI}}">{{team.name}}</a>
 			</div>
 		</div>
 	</div>
-	<hr>
 </div>
-<div class="container-fluid">
-	<div class="row">
-		<a href="#/seasons">Seasons Page</a><br>
-		<a href="#/tank">Tank Page</a><br>
-		<p>With ♥ from <a href="https://twitter.com/rewind_polo">@rewind_polo</a></p>
-	</div>
+<hr>
+<dir class="container-fluid">
+    <div class="row">
+      <div class="md-col=12" style="margin: 15px"> <!-- Why 15px here -->
+        <p>With ♥ from <a href="https://twitter.com/rewind_polo">@rewind_polo</a></p>
+      </div> 
+    </div>
+  </div>
 </div>
