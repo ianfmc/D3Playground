@@ -26,12 +26,14 @@ angular.module('d3Playground')
   var gamesList = {};
   gamesList.list = [{ id: 1,
                       seasonID: 1, 
+                      date: '3/15/15',
                       location: 'San Diego, CA',
                       opponent: 'Red Barons',
                       score: '13:12'
                     },
                     {
                       id: 2,
+                      date: '3/27/15',
                       seasonID: 1, 
                       location: 'Irvine, CA',
                       opponent: 'Blue Bomber',
@@ -48,6 +50,14 @@ angular.module('d3Playground')
         return true;
       }
     });
+  };
+
+  gamesList.getForID = function (id) {
+    return gamesList.list.filter(function(value) {
+      if (value.id===id) {
+        return true;
+      }
+    })[0];
   };
 
   return gamesList;
