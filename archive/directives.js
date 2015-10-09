@@ -1,7 +1,6 @@
 'use strict';
 
-angular.module('d3Playground')
-.directive('tank', function () {
+d3Playground.directive('tank', function () {
     return {
     	scope: true,
     	restrict: 'A',
@@ -370,4 +369,15 @@ angular.module('d3Playground')
 		    draw();
     	}
     };
-  });
+ });
+
+d3Playground.directive('table', function () {
+    return {
+    	scope: true,
+    	restrict: 'A',
+    	templateUrl: 'app/templates/boxscore.html', // '<div class="md-col-12"><h2>Table</h2></div>',
+    	link: function () {
+    		// actions here
+    	}
+    };
+});

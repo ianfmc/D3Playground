@@ -1,0 +1,152 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-size: 0.5em;
+  background: transparent;
+  width: 100%;
+  position: relative;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  font-family: Futura, sans-serif;
+}
+
+.post {
+  width: 500px;
+}
+
+.clear {
+  clear: both !important;
+  height: 0 !important;
+  width: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  float: none !important;
+}
+
+#team {
+  margin-bottom: 2px;
+}
+
+#team span {
+  display: inline-block;
+}
+
+#team span:last-child {
+  font-weight: bolder;
+  border-bottom: 1px solid black;
+  width: 50%;
+  margin-left: 10px;
+}
+
+.table {
+  border-collapse: collapse;
+  background: white;
+}
+
+.table th {
+  font-weight: normal;
+}
+
+.table td, .table th {
+  border: 1px solid black;
+  text-align: center;
+  padding: 5px 0;
+}
+
+#time-outs {
+  margin-top: 5px;
+}
+
+#time-outs .ng-binding {
+  border: 1px solid black;
+  background: white;
+  text-align: center;
+  padding: 5px 0;
+}
+
+#time-outs tr:first-child td:first-child {
+  padding-right: 20px;
+  vertical-align: top;
+  padding-top: 9px;
+  font-size: 1.3em;
+}
+
+#time-outs tr:last-child td {
+  text-align: center;
+  padding-top: 5px;
+}
+
+#time-outs .push {
+  padding-left: 5%;
+}
+
+#sheets {
+  height: 100vh;
+}
+
+#sheet {
+  height: 100%;
+  overflow-x: scroll;
+  overflow-y: hidden;
+}
+
+#sheet .table-wrapp {
+  border-collapse: collapse;
+}
+
+#sheet .td-wrapp {
+  width: 245px;
+}
+
+#sheet #right-side .table {
+  float: left;
+}
+
+#sheet .inner-td:first-child {
+  padding-left: 0;
+}
+
+#sheet .inner-td {
+  padding-left: 37px;
+  vertical-align: top;
+}
+
+#sheet #right-side .table td,
+#sheet .table td,
+#sheet .table th {
+  border-color: #A5A7AA;
+}
+
+#sheet #right-side #referees {
+  float: right;
+  width: 45%;
+}
+
+#referees span.ref-head {
+  display: block;
+  padding: 5px 0;
+}
+
+#referees .ref-name {
+  height: 75px;
+  border-bottom: 2px solid #A5A7AA;
+  width: 100%;
+  position: relative;
+}
+
+#referees .ref-name:last-child {
+  height: 72px;
+}
+
+#referees .ref-name span {
+  display: block;
+  position: absolute;
+  bottom: 5px;
+  right: 0;
+  left: 0;
+  text-align: center;
+}

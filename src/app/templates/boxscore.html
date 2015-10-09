@@ -1,0 +1,154 @@
+<div id="tables" ng-if="team != 'sheet_table'">
+  <div id="team">
+    <span>{{ table.header.team }} ({{ table.header.place }})</span>
+    <span>{{ table.header.team_name }}</span>
+  </div>
+
+  <table width="100%" class="table">
+    <thead>
+      <tr>
+        <th rowspan="2" width="5%">Alt. No.</th>
+        <th rowspan="2" width="5%">Cap. No.</th>
+        <th rowspan="2" width="30%">Name</th>
+        <th rowspan="2" colspan="3">Personal Fouls</th>
+        <th colspan="7">Goals by Quarter</th>
+      </tr>
+      <tr>
+        <th width="5%">1</th>
+        <th width="5%">2</th>
+        <th width="5%">3</th>
+        <th width="5%">4</th>
+        <th width="5%">OT</th>
+        <th width="5%">OT</th>
+        <th width="5%">SD</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="stat in table.table">
+        <td>{{ stat.alt_no }}</td>
+        <td>{{ stat.cap_no }}</td>
+        <td>{{ stat.name }}</td>
+        <td width="5%">{{ stat.personal_fouls.foul_1 }}</td>
+        <td width="5%">{{ stat.personal_fouls.foul_2 }}</td>
+        <td width="5%">{{ stat.personal_fouls.foul_3 }}</td>
+        <td>{{ stat.goals_by_quarter.quarter_1 }}</td>
+        <td>{{ stat.goals_by_quarter.quarter_2 }}</td>
+        <td>{{ stat.goals_by_quarter.quarter_3 }}</td>
+        <td>{{ stat.goals_by_quarter.quarter_4 }}</td>
+        <td>{{ stat.goals_by_quarter.quarter_ot_1 }}</td>
+        <td>{{ stat.goals_by_quarter.quarter_ot_2 }}</td>
+        <td>{{ stat.goals_by_quarter.quarter_sd }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table id="time-outs">
+    <tbody>
+      <tr>
+        <td rowspan="2">Time-Outs</td>
+        <td width="15%">{{ table.footer.regular_time.time_1 }}</td>
+        <td width="15%">{{ table.footer.regular_time.time_2 }}</td>
+        <td width="15%">{{ table.footer.regular_time.time_3 }}</td>
+        <td width="5%"></td>
+        <td width="15%">{{ table.footer.overtime }}</td>
+        <td width="5%"></td>
+        <td width="15%">{{ table.footer.seconds }}</td>
+      </tr>
+      <tr>
+        <td colspan="3">Regular Time</td>
+        <td colspan="2" class="push">Overtime</td>
+        <td colspan="2" class="push">20-seconds</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="clear"></div>
+
+<div id="sheets" ng-if="team == 'sheet_table'">
+  <div id="sheet">
+    <table class="table-wrapp">
+      <tbody>
+        <tr>
+          <td class="inner-td" ng-repeat="rows in chunkedData">
+            <div class="td-wrapp">
+              <table class="table" width="100%">
+                <thead>
+                <tr>
+                  <th>Time</th>
+                  <th>No</th>
+                  <th>Team</th>
+                  <th>Remarks</th>
+                  <th>W - D</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="sheet in rows">
+                  <td>{{ sheet.time }}</td>
+                  <td>{{ sheet.no }}</td>
+                  <td>{{ sheet.team }}</td>
+                  <td>{{ sheet.remarks }}</td>
+                  <td>{{ sheet.w_d }}</td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </td>
+          <td class="inner-td">
+            <div id="right-side" class="td-wrapp">
+              <table width="50%" class="table">
+                <tbody>
+                <tr>
+                  <td>QTR</td>
+                  <td>WHITE</td>
+                  <td>DARK</td>
+                </tr>
+                <tr>
+                  <td>1ST</td>
+                  <td>{{ sheet.right.white.first }}</td>
+                  <td>{{ sheet.right.dark.first }}</td>
+                </tr>
+                <tr>
+                  <td>2ND</td>
+                  <td>{{ sheet.right.white.second }}</td>
+                  <td>{{ sheet.right.dark.second }}</td>
+                </tr>
+                <tr>
+                  <td>3RD</td>
+                  <td>{{ sheet.right.white.third }}</td>
+                  <td>{{ sheet.right.dark.third }}</td>
+                </tr>
+                <tr>
+                  <td>4TH</td>
+                  <td>{{ sheet.right.white.fourth }}</td>
+                  <td>{{ sheet.right.dark.fourth }}</td>
+                </tr>
+                <tr>
+                  <td>OT</td>
+                  <td>{{ sheet.right.white.ot }}</td>
+                  <td>{{ sheet.right.dark.ot }}</td>
+                </tr>
+                <tr>
+                  <td>FINAL</td>
+                  <td>{{ sheet.right.white.final }}</td>
+                  <td>{{ sheet.right.dark.final }}</td>
+                </tr>
+                </tbody>
+              </table>
+              <div id="referees">
+                <span class="ref-head">REFEREES</span>
+                <div class="ref-name" ng-if="sheet.referees.first">
+                  <span>{{ sheet.referees.first }}</span>
+                </div>
+                <div class="ref-name" ng-if="sheet.referees.second">
+                  <span>{{ sheet.referees.second }}</span>
+                </div>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="clear"></div>
+  </div>
+</div>

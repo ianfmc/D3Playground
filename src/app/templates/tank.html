@@ -1,0 +1,36 @@
+<div class="container-fluid" ng-controller='TankCtrl'>
+	<div class="row">
+		<div class="md-col-12" style="margin: 10px">
+			<h2>Game: {{game.opponent}} on {{game.date}} @ {{game.location}}</h2>
+    </div>
+
+    <div class="md-col-12" style="margin: 10px; align: center">
+
+      <div class="btn-group" data-toggle="buttons">
+        <label class="btn btn-default">
+          <input type="radio" id="results-1" ng-model="resultsChoice" name="rewind" value="rewind"/>Rewind
+        </label>
+        <label class="btn btn-default">
+          <input type="radio" id="results-2" ng-model="resultsChoice" name="box" value="box"/>Box Score
+        </label>
+      </div>
+    </div>
+    <br>
+    <div class="md-col-12" style="margin: 10px">
+      <div ng-switch on="resultsChoice">
+        <div ng-switch-when="rewind"><div tank /></div>
+        <div ng-switch-when="box"><div table /></div>
+      </div>	
+		</div>
+	</div>
+</div>
+<dir class="container-fluid">
+    <div class="row">
+      <div class="md-col-12" style="margin: 10px"> 
+        <a href="#/">Home Page</a><br>
+        <p>With ♥ from <a href="https://twitter.com/rewind_polo">@rewind_polo</a></p>
+      </div> 
+    </div>
+  </div>
+</div>
+

@@ -1,7 +1,6 @@
 'use strict';
 
-angular.module('d3Playground')
-.factory('seasonsService', function() {
+d3Playground.factory('seasonsService', function() {
 
   var seasonsList = {};
   seasonsList.list = [{ id: 1,
@@ -20,8 +19,7 @@ angular.module('d3Playground')
   return seasonsList;
 });
 
-angular.module('d3Playground')
-.factory('gamesService', function() {
+d3Playground.factory('gamesService', function() {
 
   var gamesList = {};
   gamesList.list = [{ id: 1,
@@ -63,8 +61,7 @@ angular.module('d3Playground')
   return gamesList;
 });
 
-angular.module('d3Playground')
-.factory('teamsService', function() {
+d3Playground.factory('teamsService', function() {
 
   var teamList = {};
   teamList.list = [{  id: 1,
@@ -98,8 +95,7 @@ angular.module('d3Playground')
   return teamList;
 });
 
-angular.module('d3Playground')
-.factory('playersService', function() {
+d3Playground.factory('playersService', function() {
 
   var playerList = {};
   playerList.list = [
@@ -126,11 +122,10 @@ angular.module('d3Playground')
   return playerList;
 });
 
-angular.module('d3Playground')
-.factory('gameEventsService', function() {
+d3Playground.factory('gameEventsService', function() {
 
-  var gameEvents = {};
-  gameEvents.list = [ 
+  var gameEventsList = {};
+  gameEventsList.list = [ 
                       {team: 0, time: '1:24', player: '1', type: 'shot', x: 100, y: 100},    
                       {team: 0, time: '1:54', player: '2', type: 'pass', x: 200, y: 150},
                       {team: 0, time: '2:24', player: '3', type: 'shot', x: 300, y: 200},
@@ -141,4 +136,6 @@ angular.module('d3Playground')
                       {team: 1, time: '4:54', player: '8', type: 'goal', x: 800, y: 250},
                       {team: 0, time: '5:24', player: '2', type: 'steal', x: 700, y: 200} 
                     ];
+
+  return gameEventsList;
 });
