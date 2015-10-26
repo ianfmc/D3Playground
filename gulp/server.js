@@ -3,6 +3,7 @@
 var gulp = require('gulp');
 var browserSync = require('browser-sync');
 var browserSyncSpa = require('browser-sync-spa');
+var connect = require('gulp-connect');
 
 var util = require('util');
 
@@ -42,6 +43,14 @@ module.exports = function(options) {
 
   gulp.task('serve', ['watch'], function () {
     browserSyncInit([options.tmp + '/serve', options.src]);
+  });
+
+  gulp.task('serve:prod', ['build'], function () {
+	  connect.server({
+		  root: 'dist',
+		      port: process.env.PORT || 5000,
+		      livereload: false
+		      });
   });
 
   gulp.task('serve:dist', ['build'], function () {
