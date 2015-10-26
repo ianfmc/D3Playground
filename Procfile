@@ -1,1 +1,1 @@
-web: node app/scripts/index.js
+web: node node_modules/gulp/bin/gulp build
