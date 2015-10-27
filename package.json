@@ -16,7 +16,6 @@
     "wrench": "~1.5.8",   
     "browser-sync": "~2.1.4",
     "browser-sync-spa": "~1.0.2",
-    "assemble": "git://github.com/assemble/assemble#v0.6.0",
     "lodash": "^2.4.1",
     "marked": "^0.3.2"
   },
