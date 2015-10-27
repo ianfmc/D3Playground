@@ -7,7 +7,7 @@ var connect = require('gulp-connect');
 
 var util = require('util');
 
-// var middleware = require('./proxy');
+var middleware = require('./proxy');
 
 module.exports = function(options) {
 
@@ -37,9 +37,13 @@ module.exports = function(options) {
     });
   }
 
+  /**
+
   browserSync.use(browserSyncSpa({
     selector: '[ng-app]'// Only needed for angular apps
   }));
+
+  */
 
   gulp.task('serve', ['watch'], function () {
     browserSyncInit([options.tmp + '/serve', options.src]);
