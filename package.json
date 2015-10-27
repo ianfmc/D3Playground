@@ -37,6 +37,7 @@
     "karma-phantomjs-launcher": "~0.1.4",
     "karma-ng-html2js-preprocessor": "~0.1.2",
     "wiredep": "~2.2.0",
+    "chalk": "~0.5.1",
     "http-proxy": "~1.8.0",
     "protractor": "~1.7.0"
   },
@@ -51,7 +52,6 @@
     "jshint-stylish": "~1.0.0",
     "concat-stream": "~1.4.7",
     "require-dir": "~0.1.0",
-    "chalk": "~0.5.1",
     "uglify-save-license": "~0.4.1"
   },
   "engines": {
