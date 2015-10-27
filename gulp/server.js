@@ -7,7 +7,7 @@ var connect = require('gulp-connect');
 
 var util = require('util');
 
-var middleware = require('./proxy');
+// var middleware = require('./proxy');
 
 module.exports = function(options) {
 
