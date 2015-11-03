@@ -1,3 +1,5 @@
+/* jshint -W097 */
+
 'use strict';
 
 var d3Playground = angular.module('d3Playground', [
@@ -46,6 +48,8 @@ d3Playground.controller('TankCtrl', function ($scope, $routeParams, teamsService
 d3Playground.controller('TeamsCtrl', function ($scope, teamsService) {
 
     $scope.teams = teamsService.get();
+    $scope.isLoggedOut = false;
+    $scope.isLoggedIn = true;
   
   });
 
