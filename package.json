@@ -49,7 +49,8 @@
     "protractor": "~1.7.0"
   },
   "scripts": {
-    "test": "gulp test"
+    "postinstall": "gulp build",
+    "start": "node index.js"
   },
   "devDependencies": {
     "uglify-save-license": "~0.4.1"
