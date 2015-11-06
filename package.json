@@ -53,14 +53,14 @@
     "wiredep": "~2.2.0",
     "chalk": "~0.5.1",
     "http-proxy": "~1.8.0",
-    "protractor": "~1.7.0"
+    "protractor": "~1.7.0",
+    "uglify-save-license": "~0.4.1"
   },
   "scripts": {
     "postinstall": "./node_modules/bower/bin/bower install && gulp build",
     "start": "gulp serve"
   },
   "devDependencies": {
-    "uglify-save-license": "~0.4.1"
   },
   "engines": {
     "node": "0.12.4",
