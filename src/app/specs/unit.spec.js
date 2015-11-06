@@ -1,3 +1,5 @@
+/* jshing -W097 */
+
 'use strict';
 
 describe('Teams Controller', function () {

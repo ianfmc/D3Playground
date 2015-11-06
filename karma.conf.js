@@ -23,7 +23,7 @@ module.exports = function(config) {
     ],
 
     frameworks: [
-      'jasmine'],
+      'jasmine', 'karma-jasmine'],
 
     ngHtml2JsPreprocessor: {
       stripPrefix: 'src/',

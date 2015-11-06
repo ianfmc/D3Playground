@@ -37,8 +37,6 @@ module.exports = function(options) {
     });
   }
 
-  /**
-
   browserSync.use(browserSyncSpa({
     selector: '[ng-app]'// Only needed for angular apps
   }));
