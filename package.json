@@ -57,7 +57,8 @@
     "uglify-save-license": "~0.4.1"
   },
   "scripts": {
-    "postinstall": "./node_modules/bower/bin/bower install && gulp build"
+    "postinstall": "./node_modules/bower/bin/bower install && gulp build",
+    "start": "gulp serve:prod"
   },
   "devDependencies": {
   },
