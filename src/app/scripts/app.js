@@ -424,7 +424,7 @@ d3Playground.directive('tank', function () {
           /* Forward Text */
 
           svg.append('text')
-            .text('>>')
+            .text('>')
             .attr('x', w*0.50 + (250-100))
             .attr('y', paddingWidth + 70)
             .attr('id', 'fast-foward')
@@ -437,7 +437,7 @@ d3Playground.directive('tank', function () {
           /* Back Button Box */
 
           svg.append('text')
-            .text('<<')
+            .text('<')
             .attr('x', w*0.50 - (250-100))
             .attr('y', paddingWidth + 70)
             .attr('id', 'rewind')
