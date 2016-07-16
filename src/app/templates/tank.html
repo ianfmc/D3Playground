@@ -1,11 +1,11 @@
 <div class="container-fluid" ng-controller='TankCtrl'>
 	<div class="row">
 		<div class="md-col-12" style="margin: 10px">
-			<h2>Game: {{game.opponent}} on {{game.date}} @ {{game.location}}</h2>
+			<h1>Game: {{game.opponent}} on {{game.date}} @ {{game.location}}</h1>
+      <p>In 'Rewind,' Click on the arrows to go forward or backward in the game</p>
     </div>
 
     <div class="md-col-12" style="margin: 10px; align: center">
-
       <div class="btn-group" data-toggle="buttons">
         <label class="btn btn-default">
           <input type="radio" id="results-1" ng-model="resultsChoice" name="rewind" value="rewind"/>Rewind

@@ -421,25 +421,33 @@ d3Playground.directive('tank', function () {
             .attr('font-size', '60px')
             .attr('fill', 'white');
 
-          /* Forward Button Box */
+          /* Forward Text */
 
-          svg.append('rect')
+          svg.append('text')
+            .text('>>')
             .attr('x', w*0.50 + (250-100))
-            .attr('y', paddingWidth)
-            .attr('width', 100)
-            .attr('height', 100)
-            .style('fill', 'grey')
+            .attr('y', paddingWidth + 70)
+            .attr('id', 'fast-foward')
+            .attr('text-anchor', 'middle')
+            .attr('font-family', 'sans-serif')
+            .attr('font-size', '60px')
+            .attr('fill', 'black')
             .on('click', clickRightButton);
 
           /* Back Button Box */
 
-          svg.append('rect')
-            .attr('x', w*0.5 - 250)
-            .attr('y', paddingWidth)
-            .attr('width', 100)
-            .attr('height', 100)
-            .style('fill', 'grey')
+          svg.append('text')
+            .text('<<')
+            .attr('x', w*0.50 - (250-100))
+            .attr('y', paddingWidth + 70)
+            .attr('id', 'rewind')
+            .attr('text-anchor', 'middle')
+            .attr('font-family', 'sans-serif')
+            .attr('font-size', '60px')
+            .attr('fill', 'black')
             .on('click', clickLeftButton);
+
+
         };
         draw();
       }
